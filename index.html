@@ -2284,6 +2284,51 @@ body.dark-mode .search-box-heading {
 }
 </style>
 
+<!-- Selected checklist items only: screen presentation for first three consent forms -->
+<style id="selected-checklist-only-screen">
+/* In the first three consent forms, keep the full checklist searchable in its
+   autocomplete dropdown, but show only entries selected by the user on screen.
+   This is screen-only so the existing print preparation remains unchanged. */
+@media screen {
+  #form1-view .checkbox-list .checkbox-item:not(.selected-highlight),
+  #form2-view .checkbox-list .checkbox-item:not(.selected-highlight),
+  #form3-view .checkbox-list .checkbox-item:not(.selected-highlight) {
+    display: none !important;
+  }
+}
+</style>
+
+<style id="available-checklist-toggle-style">
+@media screen {
+  .checklist-toggle {
+    display: inline-flex; align-items: center; gap: 10px;
+    margin: 10px 0 16px; border: 1px solid rgba(130,130,140,.25);
+    border-radius: 14px; background: rgba(255,255,255,.94); color: #30323a;
+    padding: 8px 10px 8px 12px; font: 600 13px/1.2 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    cursor: pointer; box-shadow: 0 3px 14px rgba(0,0,0,.10); -webkit-tap-highlight-color: transparent;
+  }
+  .checklist-toggle-track { position:relative; display:inline-block; flex:0 0 42px; width:42px; height:26px; border-radius:999px; background:#c7c7cc; transition:background .2s ease; }
+  .checklist-toggle-thumb { position:absolute; top:3px; left:3px; width:20px; height:20px; border-radius:50%; background:#fff; box-shadow:0 1px 3px rgba(0,0,0,.24); transition:transform .2s ease; }
+  .checklist-toggle[aria-checked="true"] .checklist-toggle-track { background:#34c759; }
+  .checklist-toggle[aria-checked="true"] .checklist-toggle-thumb { transform:translateX(16px); }
+  .checklist-toggle:focus-visible { outline:3px solid #8ab4f8; outline-offset:3px; }
+  body.dark-mode .checklist-toggle { background:#252c35; color:#f8f9fa; border-color:#495057; }
+  #form1-view.checklist-expanded .checkbox-list .checkbox-item,
+  #form2-view.checklist-expanded .checkbox-list .checkbox-item,
+  #form3-view.checklist-expanded .checkbox-list .checkbox-item { display:flex !important; }
+}
+@media print { .checklist-toggle { display:none !important; } }
+</style>
+<script id="available-checklist-toggle-function">
+function toggleAvailableChecklist(viewId, button) {
+  const view = document.getElementById(viewId);
+  if (!view) return;
+  const expanded = view.classList.toggle('checklist-expanded');
+  button.setAttribute('aria-checked', expanded ? 'true' : 'false');
+  const label = button.querySelector('.checklist-toggle-label');
+  if (label) label.textContent = expanded ? 'Hide Checklist' : 'Show Checklist';
+}
+</script>
 </head>
 <body>
     <div id="visitor-counter" aria-label="Shared visit counter" title="Shared visit count across everyone using this published HTML"><span aria-hidden="true">👁</span><span>VISITS</span><span class="counter-number" id="visitor-count-value">—</span></div>
@@ -2460,6 +2505,11 @@ body.dark-mode .search-box-heading {
                     </div>
                     <ul id="autocomplete-list-1" class="autocomplete-list"></ul>
                 </div>
+                    <button type="button" class="checklist-toggle" aria-checked="false"
+                      onclick="toggleAvailableChecklist('form1-view', this)">
+                      <span class="checklist-toggle-track" aria-hidden="true"><span class="checklist-toggle-thumb"></span></span>
+                      <span class="checklist-toggle-label">Show Checklist</span>
+                    </button>
             </div>
 
             <div class="free-text-area">
@@ -2846,6 +2896,11 @@ body.dark-mode .search-box-heading {
                     </div>
                     <ul id="autocomplete-list-2" class="autocomplete-list"></ul>
                 </div>
+                    <button type="button" class="checklist-toggle" aria-checked="false"
+                      onclick="toggleAvailableChecklist('form2-view', this)">
+                      <span class="checklist-toggle-track" aria-hidden="true"><span class="checklist-toggle-thumb"></span></span>
+                      <span class="checklist-toggle-label">Show Checklist</span>
+                    </button>
             </div>
 
             <!-- START NEW BLOCK FOR PROCEDURE AND INDICATION -->
@@ -3404,6 +3459,11 @@ Transfusion Reaction</strong><br>
                     </div>
                     <ul id="autocomplete-list-3" class="autocomplete-list"></ul>
                 </div>
+                    <button type="button" class="checklist-toggle" aria-checked="false"
+                      onclick="toggleAvailableChecklist('form3-view', this)">
+                      <span class="checklist-toggle-track" aria-hidden="true"><span class="checklist-toggle-thumb"></span></span>
+                      <span class="checklist-toggle-label">Show Checklist</span>
+                    </button>
             </div>
 
 
