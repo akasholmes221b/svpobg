@@ -2225,6 +2225,65 @@ body.dark-mode .search-box-heading {
   }
 }
 </style>
+
+<style id="gentle-premium-loading-and-menu-refinements">
+@media screen {
+  /* A quiet, layered background: depth without visible grain or clutter */
+  #department-splash::before {
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    background:
+      radial-gradient(ellipse at 50% 42%, rgba(115,174,157,.075) 0%, transparent 58%),
+      radial-gradient(ellipse at 50% 100%, rgba(9,15,19,.24) 0%, transparent 68%),
+      repeating-linear-gradient(0deg, rgba(255,255,255,.008) 0px, rgba(255,255,255,.008) 1px, transparent 1px, transparent 4px);
+    opacity: .48;
+  }
+  #department-splash .splash-content { position: relative; z-index: 1; }
+
+  /* Slower, softer breathing glow around the loading logo */
+  #department-splash .splash-logo::before {
+    background: radial-gradient(circle, rgba(255,226,241,.30) 0%, rgba(255,213,234,.13) 42%, rgba(255,235,245,0) 74%) !important;
+    filter: blur(10px) !important;
+  }
+  #department-splash .splash-logo:hover::before,
+  #department-splash .splash-logo:focus-visible::before {
+    opacity: .68 !important; transform: scale(1.20) !important;
+    animation: splash-halo-breathe-gentle 3.6s ease-in-out infinite !important;
+  }
+  @keyframes splash-halo-breathe-gentle {
+    0%, 100% { opacity: .46; filter: blur(9px); }
+    50% { opacity: .68; filter: blur(13px); }
+  }
+
+  /* Fine, understated card outline and smooth menu interaction */
+  #main-view .main-menu-card {
+    border: 1px solid rgba(189,93,136,.13);
+    transition: box-shadow .28s ease, border-color .28s ease;
+  }
+  body.dark-mode #main-view .main-menu-card {
+    border-color: rgba(72,198,154,.13);
+  }
+  #main-view .link-group > .consent-link {
+    transition: background-color .24s ease, color .24s ease, border-color .24s ease,
+      box-shadow .28s ease, transform .24s cubic-bezier(.2,.8,.2,1);
+    will-change: transform;
+  }
+  #main-view .link-group > .consent-link:hover,
+  #main-view .link-group > .consent-link:focus-visible {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(189,93,136,.13);
+  }
+  body.dark-mode #main-view .link-group > .consent-link:hover,
+  body.dark-mode #main-view .link-group > .consent-link:focus-visible {
+    box-shadow: 0 10px 24px rgba(72,198,154,.12);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  #department-splash .splash-logo::before,
+  #main-view .link-group > .consent-link,
+  #main-view .main-menu-card { animation: none !important; transition: none !important; }
+}
+</style>
+
 </head>
 <body>
     <div id="visitor-counter" aria-label="Shared visit counter" title="Shared visit count across everyone using this published HTML"><span aria-hidden="true">👁</span><span>VISITS</span><span class="counter-number" id="visitor-count-value">—</span></div>
@@ -5071,7 +5130,6 @@ Transfusion Reaction</strong><br>
     splash.innerHTML =
       '<div class="splash-content">' +
         (logoSrc ? '<div class="splash-heartbeat-stage"><svg class="splash-heartbeat-track" viewBox="0 0 700 120" preserveAspectRatio="none" aria-hidden="true"><path class="splash-ecg-base" d="M28 60 H160 L178 60 L190 47 L204 73 L222 60 H290 L307 60 L322 24 L342 99 L360 44 L377 60 H510 L526 60 L540 47 L554 73 L570 60 H672"/><path class="splash-ecg-run" d="M28 60 H160 L178 60 L190 47 L204 73 L222 60 H290 L307 60 L322 24 L342 99 L360 44 L377 60 H510 L526 60 L540 47 L554 73 L570 60 H672"/></svg><div class="splash-logo logo" tabindex="0" role="button" aria-label="Hover to animate ECG; click to enter"><img alt="" /></div></div>' : '<div style="font-size:54px;color:#48c69a">✚</div>') +
-        '<div class="splash-title">Department of Obstetrics &amp; Gynecology</div>' +
         '<div class="splash-subtitle">We Enter to Learn, Leave to Achieve</div>' +
         '' +
       '</div>';
