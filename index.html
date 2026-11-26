@@ -5374,5 +5374,24 @@ Transfusion Reaction</strong><br>
   .action-btn, .back-btn { padding-left: 10px !important; padding-right: 10px !important; }
 }
 </style>
+
+<style id="selected-content-print-font-adjustment">
+/* Print-only font adjustments for selected content in the first three links. */
+@media print {
+  #pdf-content-1 .checkbox-item .checkbox-label {
+    font-size: calc(1em + 5pt) !important;
+  }
+  #pdf-content-2 .checkbox-item .checkbox-label,
+  #pdf-content-3 .checkbox-item .checkbox-label {
+    font-size: calc(1em + 2.5pt) !important;
+  }
+  #pdf-content-1 .checkbox-item .checkbox-label strong,
+  #pdf-content-2 .checkbox-item .checkbox-label strong,
+  #pdf-content-3 .checkbox-item .checkbox-label strong {
+    font-size: inherit !important;
+  }
+}
+</style>
+
 </body>
 </html>
