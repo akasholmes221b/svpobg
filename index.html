@@ -1626,7 +1626,12 @@
           }
           body.dark-mode #ultrasound-ga-view .uga-shell h2,
           body.dark-mode #ultrasound-ga-view .uga-result .big {
-            color: #f2a8ca !important;
+            color: #198754 !important;
+          }
+          body.dark-mode #ultrasound-ga-view .uga-actions button {
+            background: #198754 !important;
+            color: #ffffff !important;
+            border-color: #198754 !important;
           }
           body.dark-mode #ultrasound-ga-view .uga-field label,
           body.dark-mode #ultrasound-ga-view .uga-sub,
@@ -1647,8 +1652,8 @@
           }
           body.dark-mode #ultrasound-ga-view .uga-actions button.secondary {
             background: #252c35 !important;
-            color: #f2a8ca !important;
-            border-color: #d86b9a !important;
+            color: #198754 !important;
+            border-color: #198754 !important;
           }
         }
 
@@ -1686,9 +1691,206 @@
           #ultrasound-ga-view .back-btn { font-size:13px; }
         }
 </style>
+
+<style id="main-menu-game-hover-effect">
+/* Subtle video-game menu hover: gentle zoom with a soft blush halo.
+   Scoped to the six main-screen options only. */
+#main-view .consent-link {
+  transform-origin: center;
+  transition: transform 220ms cubic-bezier(.2,.75,.25,1),
+             box-shadow 220ms ease, border-color 220ms ease,
+             background-color 220ms ease, filter 220ms ease;
+}
+@media (hover: hover) and (pointer: fine) {
+  #main-view .consent-link:hover,
+  #main-view .consent-link:focus-visible {
+    position: relative;
+    z-index: 2;
+    transform: translateY(-2px) scale(1.025);
+    border-color: #d58eaf;
+    box-shadow:
+      0 0 0 2px rgba(213, 142, 175, .28),
+      0 0 18px 4px rgba(213, 142, 175, .22),
+      0 12px 28px rgba(120, 53, 86, .14);
+    filter: saturate(1.04);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  #main-view .consent-link { transition: none; }
+}
+</style>
+
+
+<style id="requested-main-notes-print-adjustments">
+/* Light-mode Print Selected buttons: dark pink */
+@media screen {
+  body:not(.dark-mode) .action-btn.print-btn {
+    background: #a92760 !important;
+    border-color: #8f1f50 !important;
+    color: #ffffff !important;
+  }
+  body:not(.dark-mode) .action-btn.print-btn:hover,
+  body:not(.dark-mode) .action-btn.print-btn:focus-visible {
+    background: #8f1f50 !important;
+    border-color: #771940 !important;
+    box-shadow: 0 0 0 3px rgba(169, 39, 96, .18) !important;
+  }
+}
+/* Notes landing page: hide the logo image and inspirational quotation only.
+   Preserve the ECG animation and the Notes menu links. */
+#notes-menu-view .heartbeat-stage .logo,
+#notes-menu-view .life-purpose-quote {
+  display: none !important;
+}
+</style>
+
+
+<style id="center-six-main-menu-links">
+/* Precisely center the six primary menu choices within the main card */
+#main-view .main-menu-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+#main-view .main-menu-card > .link-group {
+  width: min(100%, 640px);
+  margin-inline: auto;
+  align-items: stretch;
+}
+#main-view .main-menu-card > .link-group > .consent-link {
+  width: 100%;
+  max-width: none;
+  margin-inline: 0;
+  text-align: center;
+  justify-content: center;
+}
+#main-view .main-menu-card > .link-group > .consent-link::after {
+  position: absolute;
+  right: 20px;
+  margin-left: 0;
+}
+</style>
+
+
+<style id="user-requested-menu-selector-spacing-adjustments">
+/* Main-menu hyperlink colors: dark pink in light mode, print-button green in dark mode */
+@media screen {
+  body:not(.dark-mode) #main-view .consent-link {
+    color: #a92760 !important;
+    border-color: #d98aaf !important;
+  }
+  body:not(.dark-mode) #main-view .consent-link:hover,
+  body:not(.dark-mode) #main-view .consent-link:focus-visible {
+    background: #a92760 !important;
+    border-color: #8f1f50 !important;
+    color: #fff !important;
+  }
+  body.dark-mode #main-view .consent-link {
+    color: #39b86a !important;
+    border-color: #258a4b !important;
+  }
+  body.dark-mode #main-view .consent-link:hover,
+  body.dark-mode #main-view .consent-link:focus-visible {
+    background: #218838 !important;
+    border-color: #17692a !important;
+    color: #fff !important;
+  }
+}
+
+/* Keep both procedure/surgery search boxes flush-left, matching the indication box */
+.procedure-search-dropdown {
+  text-align: left !important;
+  width: 100% !important;
+  max-width: 600px !important;
+  margin: 0 0 10px 0 !important;
+}
+.procedure-search-dropdown .autocomplete-wrapper {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+}
+.search-box-heading {
+  display: block !important;
+  text-align: left !important;
+  margin: 0 0 5px 0 !important;
+  font-weight: 700 !important;
+  color: #495057 !important;
+  font-size: 13px !important;
+  text-transform: uppercase !important;
+}
+body.dark-mode .search-box-heading {
+  color: #e9ecef !important;
+}
+
+/* Tighten the Notes menu vertical spacing before Transfusion Note */
+#notes-menu-view .main-menu-card h1 {
+  margin-bottom: 6px !important;
+}
+#notes-menu-view .main-menu-card h2 {
+  margin-bottom: 10px !important;
+}
+#notes-menu-view .main-menu-card .logo {
+  display: none !important;
+}
+#notes-menu-view .main-menu-card .link-group {
+  margin-top: 0 !important;
+  gap: 12px !important;
+}
+/* Compact Notes menu: remove the decorative ECG spacer between heading and links */
+#notes-menu-view .heartbeat-stage {
+  display: none !important;
+}
+#notes-menu-view .main-menu-card h1 {
+  margin-top: 0 !important;
+  margin-bottom: 4px !important;
+}
+#notes-menu-view .main-menu-card h2 {
+  margin-top: 0 !important;
+  margin-bottom: 8px !important;
+}
+
+/* Dark-mode clinical green accent for the logo, ECG line and halo */
+@media screen {
+  body.dark-mode .main-menu-card .mother-child-logo {
+    filter: hue-rotate(125deg) saturate(1.45) brightness(1.04)
+      drop-shadow(0 0 5px rgba(25,135,84,.30)) !important;
+  }
+  body.dark-mode .main-menu-card .logo::before {
+    background: radial-gradient(circle,
+      rgba(83,220,151,.50) 0%,
+      rgba(25,135,84,.28) 38%,
+      rgba(25,135,84,0) 72%) !important;
+  }
+  body.dark-mode .main-menu-card .logo:hover .mother-child-logo,
+  body.dark-mode .main-menu-card .logo:focus-visible .mother-child-logo {
+    filter: hue-rotate(125deg) saturate(1.5) brightness(1.08)
+      drop-shadow(0 0 7px rgba(83,220,151,.85))
+      drop-shadow(0 0 19px rgba(25,135,84,.65))
+      drop-shadow(0 0 34px rgba(83,220,151,.48)) !important;
+  }
+  body.dark-mode .heartbeat-stage .ecg-base {
+    stroke: rgba(25,135,84,.32) !important;
+  }
+  body.dark-mode .heartbeat-stage .ecg-run {
+    stroke: #35c982 !important;
+    filter: drop-shadow(0 0 3px rgba(53,201,130,.55)) !important;
+  }
+  body.dark-mode .heartbeat-end-heart {
+    fill: #75e3ad !important;
+    stroke: #198754 !important;
+    filter: drop-shadow(0 2px 5px rgba(25,135,84,.35)) !important;
+  }
+  body.dark-mode .heartbeat-stage:hover .heartbeat-end-heart,
+  body.dark-mode .heartbeat-stage:focus-within .heartbeat-end-heart {
+    fill: #35c982 !important;
+    filter: drop-shadow(0 0 7px rgba(53,201,130,.75)) !important;
+  }
+}
+</style>
+
 </head>
 <body>
-    <div id="visitor-counter" aria-label="Local page visit counter" title="This count is stored only in this browser on this device"><span aria-hidden="true">👁</span><span>Visits</span><span class="counter-number" id="visitor-count-value">0</span></div>
+    <div id="visitor-counter" aria-label="Shared visit counter" title="Shared visit count across everyone using this published HTML"><span aria-hidden="true">👁</span><span>VISITS</span><span class="counter-number" id="visitor-count-value">—</span></div>
     <button id="theme-toggle" type="button" role="switch" aria-checked="false" aria-label="Dark mode">
       <span class="ios-switch-track" aria-hidden="true"><span class="ios-switch-thumb"></span></span>
       <span id="theme-toggle-label">Dark Mode</span>
@@ -1700,7 +1902,7 @@
     <div id="main-view">
         <div class="main-menu-card">
             <h1>Department of Obstetrics & Gynecology</h1>
-            <h2>Consents</h2>
+            
             
             <div class="heartbeat-stage" aria-label="Mother and child with animated ECG heart line">
                 <svg class="heartbeat-track" viewBox="0 0 700 120" preserveAspectRatio="none" aria-hidden="true">
@@ -1739,7 +1941,6 @@
       </div>
       <section class="uga-shell">
         <h2>Ultrasound Gestational Age Calculator</h2>
-        <p class="uga-sub">Calculate current gestational age from a previous ultrasound dating scan</p>
         <div class="uga-grid">
           <div class="uga-field">
             <label for="uga-scan-date">Ultrasound scan date</label>
@@ -1751,17 +1952,14 @@
           </div>
           <div class="uga-field">
             <label for="uga-days">Additional days</label>
-            <input type="number" id="uga-days" min="0" max="6" step="1" value="0">
+            <input type="number" id="uga-days" min="0" max="6" step="1">
           </div>
         </div>
         <div class="uga-actions">
           <button type="button" id="uga-calculate">Calculate GA Today</button>
           <button type="button" class="secondary" id="uga-clear">Clear</button>
         </div>
-        <div class="uga-result" id="uga-result" aria-live="polite">
-          <p>Enter the ultrasound date and gestational age reported on that scan.</p>
-        </div>
-        <p class="uga-note">Calculation: GA at scan + elapsed calendar days = current GA. Estimated due date is calculated as 280 days minus the gestational age at the scan. This is a date-arithmetic aid; use the established clinical dating and documented EDD for patient care.</p>
+        <div class="uga-result" id="uga-result" aria-live="polite"></div>
       </section>
     </div>
 
@@ -2243,7 +2441,8 @@
             </div>
 
             <!-- Custom Autocomplete for Form 2 Procedures -->
-            <div class="no-print-dropdown">
+            <div class="no-print-dropdown procedure-search-dropdown">
+                <label class="search-box-heading">Select Procedure</label>
                 <div class="autocomplete-wrapper">
                     <div class="search-input-container">
                         <span class="search-icon">🔍</span>
@@ -2261,7 +2460,7 @@
                 </div>
 
                 <div class="no-print-dropdown" style="text-align: left; margin-bottom: 0; margin-top: 10px;">
-                    <label style="font-weight: 700; color: #495057; font-size: 13px; text-transform: uppercase; margin-bottom: 5px; display: inline-block;">Indication Selector:</label>
+                    <label style="font-weight: 700; color: #495057; font-size: 13px; text-transform: uppercase; margin-bottom: 5px; display: inline-block;">Select Indication:</label>
                     
                     <!-- Custom Autocomplete for Form 2 Indications -->
                     <div class="autocomplete-wrapper" style="width: 100%; max-width: 600px; margin: 0 0 10px 0;">
@@ -2800,7 +2999,8 @@ Transfusion Reaction</strong><br>
             </div>
 
             <!-- Custom Autocomplete for Form 3 -->
-            <div class="no-print-dropdown">
+            <div class="no-print-dropdown procedure-search-dropdown">
+                <label class="search-box-heading">Select Procedure</label>
                 <div class="autocomplete-wrapper">
                     <div class="search-input-container">
                         <span class="search-icon">🔍</span>
@@ -2818,7 +3018,7 @@ Transfusion Reaction</strong><br>
                     <input type="text" id="form3-procedure-manual" class="inline-input" style="width: 100%;" placeholder="Type or write procedure...">
                 </div>
                 <div class="no-print-dropdown" style="text-align: left; margin-bottom: 0; margin-top: 10px;">
-                    <label style="font-weight: 700; color: #495057; font-size: 13px; text-transform: uppercase; margin-bottom: 5px; display: inline-block;">Indication Selector:</label>
+                    <label style="font-weight: 700; color: #495057; font-size: 13px; text-transform: uppercase; margin-bottom: 5px; display: inline-block;">Select Indication:</label>
                     <div class="autocomplete-wrapper" style="width: 100%; max-width: 600px; margin: 0 0 10px 0;">
                         <div class="search-input-container">
                             <span class="search-icon">🔍</span>
@@ -3603,12 +3803,11 @@ Transfusion Reaction</strong><br>
                         }
 
                         li.addEventListener('mousedown', (e) => {
-                            // mousedown fires before blur, preventing the dropdown from hiding before click registers
-                            e.preventDefault(); 
+                            // Select before blur; then immediately dismiss suggestions.
+                            e.preventDefault();
                             onSelect(item);
-                            input.value = ''; // clear input after selection
-                            renderList('');   // re-render to update checkmarks
-                            input.focus();
+                            input.value = '';
+                            list.style.display = 'none';
                         });
 
                         list.appendChild(li);
@@ -3619,22 +3818,52 @@ Transfusion Reaction</strong><br>
                 list.style.display = count > 0 ? 'block' : 'none';
             }
 
-            input.addEventListener('input', (e) => renderList(e.target.value));
-            
-            input.addEventListener('focus', (e) => renderList(e.target.value));
+            // Show suggestions only after a non-empty search is typed.
+            input.addEventListener('input', (e) => {
+                const query = e.target.value.trim();
+                if (query) renderList(query);
+                else list.style.display = 'none';
+            });
+
+            // Focusing an empty box never opens the full suggestion list.
+            input.addEventListener('focus', () => {
+                if (!input.value.trim()) list.style.display = 'none';
+            });
 
             input.addEventListener('blur', () => {
-                // slight timeout to allow mousedown on list items to fire
-                setTimeout(() => {
-                    list.style.display = 'none';
-                }, 150);
+                setTimeout(() => { list.style.display = 'none'; }, 120);
             });
         }
 
 
+        // Universal outside-click dismissal for all autocomplete suggestion boxes.
+        document.addEventListener('click', (event) => {
+            document.querySelectorAll('.autocomplete-list').forEach((list) => {
+                const wrapper = list.closest('.autocomplete-wrapper');
+                if (wrapper && !wrapper.contains(event.target)) list.style.display = 'none';
+            });
+        });
+
         // --- 1. Router Logic ---
         function navigate() {
             const hash = window.location.hash || '#main';
+
+            // Returning to the Main Menu starts a fresh form session.
+            // Clear checked consent points and reset their visual/order state.
+            if (hash === '#main') {
+                document.querySelectorAll('.form-view input[type="checkbox"]').forEach(checkbox => {
+                    checkbox.checked = false;
+                    checkbox.dispatchEvent(new Event('change', { bubbles: true }));
+                });
+                document.querySelectorAll('.form-view .checkbox-item').forEach(item => {
+                    item.classList.remove('selected-highlight');
+                    item.style.order = '9999';
+                });
+                document.querySelectorAll('.autocomplete-list .autocomplete-item.selected').forEach(item => {
+                    item.classList.remove('selected');
+                });
+            }
+
             
             // Hide all views first
             document.getElementById('main-view').style.display = 'none';
@@ -3751,6 +3980,17 @@ Transfusion Reaction</strong><br>
                             item.style.order = 9999; 
                             item.classList.remove('selected-highlight');
                         }
+                    });
+
+                    // Allow toggling a checklist entry by clicking its card/box,
+                    // not only the small checkbox control. Keep native checkbox
+                    // and label clicks intact so they do not toggle twice.
+                    item.addEventListener('click', function(event) {
+                        if (event.target.closest('input[type="checkbox"], label, a, button')) {
+                            return;
+                        }
+                        checkbox.checked = !checkbox.checked;
+                        checkbox.dispatchEvent(new Event('change', { bubbles: true }));
                     });
                 }
             });
@@ -4374,19 +4614,111 @@ Transfusion Reaction</strong><br>
     </script>
 
     <script>
-      // This standalone HTML has no server-side analytics; count page openings in this browser only.
+      // Shared global hit counter. The counter is public and shared across browsers/devices.
+      // A page opening increments the total once; the service returns the updated count.
       (function () {
         const output = document.getElementById('visitor-count-value');
-        const key = 'obgyn-consents-local-visit-count';
-        let count = 0;
+        const counterKey = 'obgyn-consents-ahmedabad-main-menu-visits-2026';
+        const endpoint = 'https://countapi.mileshilliard.com/api/v1/hit/' + counterKey;
+        const localKey = 'obgyn-consents-local-visit-count-fallback';
+        let fallback = 0;
         try {
-          count = Number.parseInt(localStorage.getItem(key) || '0', 10);
-          if (!Number.isFinite(count) || count < 0) count = 0;
-          count += 1;
-          localStorage.setItem(key, String(count));
-        } catch (e) { count = 1; }
-        output.textContent = count.toLocaleString();
+          fallback = Number.parseInt(localStorage.getItem(localKey) || '0', 10);
+          if (!Number.isFinite(fallback) || fallback < 0) fallback = 0;
+          fallback += 1;
+          localStorage.setItem(localKey, String(fallback));
+        } catch (e) { fallback = 1; }
+        output.textContent = '…';
+        fetch(endpoint, { cache: 'no-store' })
+          .then(function (response) {
+            if (!response.ok) throw new Error('Counter service unavailable');
+            return response.json();
+          })
+          .then(function (data) {
+            const total = Number(data.value);
+            if (!Number.isFinite(total) || total < 0) throw new Error('Invalid counter response');
+            output.textContent = Math.floor(total).toLocaleString();
+          })
+          .catch(function () {
+            output.textContent = fallback.toLocaleString();
+            output.title = 'Global counter unavailable right now; showing this browser’s fallback count';
+          });
       })();
     </script>
+
+<style id="dark-mode-green-ribbon-main-and-notes">
+@media screen {
+  body.dark-mode .main-menu-card::before {
+    background: linear-gradient(90deg, #176b3a, #39b86a 55%, #b9f6ca) !important;
+  }
+}
+</style>
+
+
+<style id="softened-logo-halo-light-and-dark">
+@media screen {
+  /* Softer halo in light mode */
+  body:not(.dark-mode) .main-menu-card .logo::before {
+    background: radial-gradient(circle,
+      rgba(255,226,241,.42) 0%,
+      rgba(255,213,234,.20) 38%,
+      rgba(255,235,245,0) 72%) !important;
+    filter: blur(3px) !important;
+  }
+  body:not(.dark-mode) .main-menu-card .logo:hover .mother-child-logo,
+  body:not(.dark-mode) .main-menu-card .logo:focus-visible .mother-child-logo {
+    filter:
+      drop-shadow(0 0 4px rgba(255,190,222,.42))
+      drop-shadow(0 0 10px rgba(237,137,184,.25))
+      drop-shadow(0 0 17px rgba(255,215,236,.22)) !important;
+  }
+
+  /* Softer emerald halo in dark mode */
+  body.dark-mode .main-menu-card .logo::before {
+    background: radial-gradient(circle,
+      rgba(83,220,151,.24) 0%,
+      rgba(25,135,84,.13) 38%,
+      rgba(25,135,84,0) 72%) !important;
+    filter: blur(3px) !important;
+  }
+  body.dark-mode .main-menu-card .logo:hover .mother-child-logo,
+  body.dark-mode .main-menu-card .logo:focus-visible .mother-child-logo {
+    filter: hue-rotate(125deg) saturate(1.5) brightness(1.08)
+      drop-shadow(0 0 4px rgba(83,220,151,.42))
+      drop-shadow(0 0 10px rgba(25,135,84,.28))
+      drop-shadow(0 0 17px rgba(83,220,151,.20)) !important;
+  }
+}
+</style>
+
+
+<style id="notes-ribbon-match-surgical-consent-accent">
+@media screen {
+  body.dark-mode #notes-menu-view .main-menu-card::before {
+    background: linear-gradient(90deg, #176b69, #78b7a6 55%, #d3e8dd) !important;
+  }
+}
+</style>
+
+
+<style id="notes-ribbon-exact-shared-consent-color">
+@media screen {
+  body.dark-mode #notes-menu-view .main-menu-card::before {
+    background: var(--clinic-teal) !important;
+  }
+}
+</style>
+
+
+<style id="notes-dark-ribbon-force-match-form-border">
+@media screen {
+  /* In dark mode the surgical consent form's top border resolves to this border color. */
+  body.dark-mode #notes-menu-view .main-menu-card::before {
+    background: #334b4a !important;
+    background-image: none !important;
+  }
+}
+</style>
+
 </body>
 </html>
