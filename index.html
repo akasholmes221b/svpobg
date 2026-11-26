@@ -5259,5 +5259,60 @@ Transfusion Reaction</strong><br>
 })();
 </script>
 
+
+<style id="mobile-responsive-layout-fix">
+/* Phone/tablet layout safety: screen only; deliberately leaves print styles untouched. */
+@media screen and (max-width: 768px) {
+  *, *::before, *::after { box-sizing: border-box !important; }
+  html, body { max-width: 100% !important; width: 100% !important; overflow-x: hidden !important; }
+  body { margin-left: 0 !important; margin-right: 0 !important; }
+  img, video, canvas, iframe, svg { max-width: 100%; }
+  input, select, textarea, button { max-width: 100%; }
+  input, select, textarea { min-width: 0 !important; }
+  table { max-width: 100%; }
+  /* Allow long clinical text and nested layout children to shrink naturally. */
+  main, section, article, .container, .content, .page, .panel, .card,
+  [class*="wrapper"], [class*="container"], [class*="content"],
+  [class*="grid"], [class*="row"], [class*="form"] {
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+  .row, [class*="row"] { flex-wrap: wrap; }
+  /* Main menu cards stack on narrow screens and use the available width. */
+  #main-view { width: 100% !important; max-width: 100% !important; padding-left: 14px !important; padding-right: 14px !important; }
+  #main-view .consent-link { width: 100% !important; max-width: 100% !important; min-width: 0 !important; white-space: normal !important; }
+  /* Form controls and action rows should not force desktop-sized columns. */
+  .action-btn, .back-btn, .print-btn, button { white-space: normal; overflow-wrap: anywhere; }
+  .button-row, .actions, .action-buttons, .form-actions, .toolbar {
+    display: flex !important; flex-wrap: wrap !important; gap: 8px !important;
+  }
+  .button-row > *, .actions > *, .action-buttons > *, .form-actions > *, .toolbar > * {
+    flex: 1 1 auto; min-width: 0 !important;
+  }
+  /* Tables remain readable and scroll within their own area rather than widening the page. */
+  .table-responsive, .table-wrap, .table-container, [class*="table-wrap"], [class*="table-container"] {
+    max-width: 100% !important; overflow-x: auto !important; -webkit-overflow-scrolling: touch;
+  }
+  /* Prevent long medical terms, URLs, and generated labels from escaping cards. */
+  p, label, h1, h2, h3, h4, td, th, li, .consent-link, .clinical-point {
+    overflow-wrap: anywhere;
+  }
+}
+@media screen and (max-width: 480px) {
+  #main-view { padding: 12px 10px 24px !important; }
+  #main-view .consent-link { padding: 13px 12px !important; gap: 10px !important; }
+  #main-view h1, #main-view h2 { max-width: 100% !important; font-size: clamp(20px, 6vw, 29px) !important; line-height: 1.2 !important; }
+  .action-btn, .back-btn, button { min-height: 42px; }
+  input, select, textarea { font-size: 16px !important; } /* avoids iOS zoom on focus */
+  .modal, [role="dialog"], .popup, .dialog {
+    width: calc(100vw - 20px) !important; max-width: calc(100vw - 20px) !important;
+    margin-left: auto !important; margin-right: auto !important;
+  }
+}
+@media screen and (max-width: 360px) {
+  #main-view .consent-link { font-size: 14px !important; }
+  .action-btn, .back-btn { padding-left: 10px !important; padding-right: 10px !important; }
+}
+</style>
 </body>
 </html>
