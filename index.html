@@ -5174,5 +5174,90 @@ Transfusion Reaction</strong><br>
 })();
 </script>
 
+
+<style id="clinical-workflow-refinements-v1">
+/* Screen-only workflow refinements: transitions, location cue, and consistent rhythm */
+@media screen {
+  .form-view, #main-view, #notes-menu-view, #bt-note-view, #induction-note-view, #ultrasound-ga-view {
+    animation: clinicalViewEnter .20s cubic-bezier(.2,.7,.25,1) both;
+  }
+  @keyframes clinicalViewEnter {
+    from { opacity: 0; transform: translateY(7px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .form-view, #main-view, #notes-menu-view, #bt-note-view, #induction-note-view, #ultrasound-ga-view { animation: none !important; }
+  }
+  .clinical-current-section {
+    display: inline-flex; align-items: center; gap: 7px;
+    margin-left: 12px; padding: 6px 11px;
+    border: 1px solid rgba(199, 93, 139, .22);
+    border-radius: 999px; background: rgba(225, 157, 185, .10);
+    color: #a94f79; font-size: 10px; font-weight: 750;
+    letter-spacing: .075em; line-height: 1.25; text-transform: uppercase;
+    vertical-align: middle;
+  }
+  .clinical-current-section::before {
+    content: ""; width: 6px; height: 6px; flex: 0 0 6px;
+    border-radius: 50%; background: #c96d96;
+    box-shadow: 0 0 0 3px rgba(201,109,150,.10);
+  }
+  body.dark-mode .clinical-current-section {
+    color: #9bd8bd; border-color: rgba(126, 190, 158, .25);
+    background: rgba(126, 190, 158, .08);
+  }
+  body.dark-mode .clinical-current-section::before { background: #83c7a5; box-shadow: 0 0 0 3px rgba(131,199,165,.10); }
+  /* A consistent, comfortable rhythm in the clinical forms; print remains untouched. */
+  .form-view .form-container { line-height: 1.55; }
+  .form-view .form-container .flex-row { gap: clamp(8px, 1.15vw, 14px); }
+  .form-view .form-container > .flex-row { margin-bottom: 14px; }
+  .form-view .form-container .input-group { margin-bottom: 8px; }
+  .form-view .form-container .header { margin-bottom: 18px; }
+  .form-view .form-container .title { line-height: 1.35; }
+  .form-view .top-nav { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+  .form-view .back-btn { transition: transform .16s ease, background .16s ease, box-shadow .16s ease; }
+  .form-view .back-btn:hover { transform: translateX(-2px); }
+  .form-view .form-container .checkbox-item { margin-bottom: 8px; }
+  .form-view .form-container label { line-height: 1.45; }
+}
+</style>
+<script id="clinical-current-section-indicator-v1">
+(() => {
+  const labels = {
+    '#obs-consent':'Obstetrics Consent',
+    '#obs-surgery':'Obstetrics Surgical Consents',
+    '#gyn-surgery':'Gynecology Surgical Consents',
+    '#bt-note':'Transfusion Note',
+    '#induction-note':'Induction Note',
+    '#ultrasound-ga':'Ultrasound GA Calculator',
+    '#investigation-chart':'Investigation Chart',
+    '#notes-menu':'Clinical Notes'
+  };
+  function refreshClinicalIndicator() {
+    const hash = location.hash || '#main';
+    const label = labels[hash];
+    document.querySelectorAll('.clinical-current-section').forEach(el => el.remove());
+    if (!label) return;
+    let target = null;
+    if (hash === '#obs-consent') target = document.querySelector('#form1-view .top-nav');
+    else if (hash === '#obs-surgery') target = document.querySelector('#form2-view .top-nav');
+    else if (hash === '#gyn-surgery') target = document.querySelector('#form3-view .top-nav');
+    else if (hash === '#bt-note') target = document.querySelector('#bt-note-view .top-nav');
+    else if (hash === '#induction-note') target = document.querySelector('#induction-note-view .top-nav');
+    else if (hash === '#ultrasound-ga') target = document.querySelector('#ultrasound-ga-view .top-nav');
+    else if (hash === '#notes-menu') target = document.querySelector('#notes-menu-view .notes-menu-top-nav');
+    if (!target) return;
+    const badge = document.createElement('span');
+    badge.className = 'clinical-current-section';
+    badge.textContent = label;
+    badge.setAttribute('aria-label', 'Current section: ' + label);
+    target.appendChild(badge);
+  }
+  window.addEventListener('hashchange', () => requestAnimationFrame(refreshClinicalIndicator));
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', refreshClinicalIndicator);
+  else refreshClinicalIndicator();
+})();
+</script>
+
 </body>
 </html>
