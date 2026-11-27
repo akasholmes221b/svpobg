@@ -2033,6 +2033,29 @@ body.dark-mode .search-box-heading {
     transition: opacity .32s ease, visibility .32s ease;
   }
   #department-splash.splash-leaving { opacity: 0; visibility: hidden; pointer-events: none; }
+  #department-splash .splash-dedication-credits {
+    position: absolute; inset: 0; z-index: 20;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 5px; padding: 20px; text-align: center;
+    background: radial-gradient(ellipse at center, #243634 0%, #12191d 72%);
+    color: #c95f91; animation: dedication-credits-in .45s ease both;
+    letter-spacing: .08em; text-transform: uppercase;
+  }
+  #department-splash .splash-dedication-title {
+    font-size: clamp(10px, 1.25vw, 12px); font-weight: 700;
+    letter-spacing: .18em; margin-bottom: 7px; opacity: .9;
+    text-transform: uppercase;
+  }
+  #department-splash .splash-dedication-name {
+    font-size: clamp(12px, 1.65vw, 15px); font-weight: 700;
+    letter-spacing: .04em; line-height: 1.4;
+    text-transform: uppercase;
+    text-shadow: 0 0 9px rgba(201,95,145,.2);
+  }
+  @keyframes dedication-credits-in {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
   #department-splash .splash-content {
     display: flex; flex-direction: column; align-items: center; gap: 15px;
     padding: 24px; text-align: center;
@@ -2088,6 +2111,13 @@ body.dark-mode .search-box-heading {
   }
   @keyframes splash-ecg-monitor-sweep { 0% { stroke-dashoffset: 700; } 100% { stroke-dashoffset: 0; } }
   @keyframes maternal-halo-pulse { 0%,100% { opacity:.38; filter:blur(7px); } 50% { opacity:.58; filter:blur(11px); } }
+  /* Hover stardust circle: diameter matches ECG track */
+  #department-splash .splash-stardust-circle {
+    position: fixed; inset: 0; width: 100vw; height: 100vh;
+    z-index: 2; pointer-events: none; opacity: 0;
+    transition: opacity .3s ease;
+  }
+  #department-splash.splash-stardust-active .splash-stardust-circle { opacity: .82; }
   #department-splash img {
     width: min(136px, 32vw); height: auto; object-fit: contain;
     filter: drop-shadow(0 0 18px rgba(72,198,154,.18));
@@ -2522,7 +2552,7 @@ function toggleAvailableChecklist(viewId, button) {
                     <input type="checkbox" id="f1-c1">
                     <div class="checkbox-label">
                         <strong>HIGH-RISK PREGNANCY: Acute Renal Failure| Congestive Cardiac Failure| Multiorgan Failure|Pulmonary Edema| Ventilator Support SOS| ICU Support SOS| General Condition Explained| Risk of morbidity and Mortality Explained</strong>
-                        <div class="reason-block">કારણ: <input type="text" class="inline-input" placeholder="Enter details..."></div>
+                        
                         દર્દીને ઉચ્ચ જોખમ સાથેની ગર્ભાવસ્થા છે. કિડનીના કાર્ય પર અસર થઇ શકે, હૃદય પર દબાણ વધી શકે અને તેના કાર્ય પર અસર થઇ શકે. અન્ય અંગો ના કાર્ય પર અસર થઇ શકે. ફેફસા માં પાણી ભરાઈ શકે, જરૂર પડે તો કૃત્રિમ શ્વસનયંત્ર પર રાખવા પડી શકે, મેડિકલ આઈ સી યુ માં રાખવા પડી શકે. માતા ની ગંભીર પરિસ્થિતિ ની દર્દી અને સગા ને જાણ કરેલ છે. યોગ્ય સારવારની જરૂર છે. 
                     </div>
                 </div>
@@ -2941,7 +2971,7 @@ function toggleAvailableChecklist(viewId, button) {
                     <input type="checkbox" id="f2-c1">
                     <div class="checkbox-label">
                         <strong>High-Risk Procedure: Acute Renal Failure| Congestive Cardiac Failure| Multiorgan Failure| Pulmonary Edema| Ventilator Support SOS| ICU admission SOS| Patient's General Condition Explained| Risk of Morbidity and Mortality Explained</strong><br>
-                        <div class="reason-block">કારણ: <input type="text" class="inline-input" placeholder="Enter details..."></div>
+                        
                         દર્દીનું ઓપેરશન ઉચ્ચ જોખમ સાથે સંકળાયેલું છે. કિડનીના કાર્ય પર અસર થઇ શકે, હૃદય પર દબાણ વધી શકે અને તેના કાર્ય પર અસર થઇ શકે. અન્ય અંગોના કાર્ય પર અસર થઇ શકે. ફેફસામાં પાણી ભરાઈ શકે, જરૂર પડે તો કૃત્રિમ શ્વસનયંત્ર પર રાખવા પડી શકે, મેડિકલ આઈ.સી.યુ માં રાખવા પડી શકે. માતાની ગંભીર પરિસ્થિતિની અને જીવના જોખમની દર્દી અને સગાને જાણ કરેલ છે.
                     </div>
                 </div>
@@ -4445,6 +4475,14 @@ Transfusion Reaction</strong><br>
                         if (event.target.closest('input[type="checkbox"], label, a, button')) {
                             return;
                         }
+
+                        // Preserve text highlighting/copying: a click that follows
+                        // selecting text must not toggle the consent checkbox.
+                        const selection = window.getSelection && window.getSelection();
+                        if (selection && selection.toString().trim().length > 0) {
+                            return;
+                        }
+
                         checkbox.checked = !checkbox.checked;
                         checkbox.dispatchEvent(new Event('change', { bubbles: true }));
                     });
@@ -5070,13 +5108,22 @@ Transfusion Reaction</strong><br>
     </script>
 
     <script>
-      // Shared global hit counter. The counter is public and shared across browsers/devices.
-      // A page opening increments the total once; the service returns the updated count.
+      // Shared daily hit counter. A new CountAPI key is used for each IST calendar day,
+      // so the displayed shared count starts afresh at 12:00 AM Asia/Kolkata.
+      // A page opening increments the current day's total once.
       (function () {
         const output = document.getElementById('visitor-count-value');
-        const counterKey = 'obgyn-consents-ahmedabad-main-menu-visits-2026';
+        const istDateParts = new Intl.DateTimeFormat('en-GB', {
+          timeZone: 'Asia/Kolkata', year: 'numeric', month: '2-digit', day: '2-digit'
+        }).formatToParts(new Date());
+        const istDate = istDateParts.reduce(function (parts, part) {
+          if (part.type !== 'literal') parts[part.type] = part.value;
+          return parts;
+        }, {});
+        const dailySuffix = istDate.year + istDate.month + istDate.day;
+        const counterKey = 'obgyn-consents-ahmedabad-daily-visits-' + dailySuffix;
         const endpoint = 'https://countapi.mileshilliard.com/api/v1/hit/' + counterKey;
-        const localKey = 'obgyn-consents-local-visit-count-fallback';
+        const localKey = 'obgyn-consents-local-visit-count-fallback-' + dailySuffix;
         let fallback = 0;
         try {
           fallback = Number.parseInt(localStorage.getItem(localKey) || '0', 10);
@@ -5097,7 +5144,7 @@ Transfusion Reaction</strong><br>
           })
           .catch(function () {
             output.textContent = fallback.toLocaleString();
-            output.title = 'Global counter unavailable right now; showing this browser’s fallback count';
+            output.title = 'Global daily counter unavailable right now; showing this browser’s fallback count';
           });
       })();
     </script>
@@ -5188,6 +5235,7 @@ Transfusion Reaction</strong><br>
     var logo = document.querySelector('#main-view .mother-child-logo');
     var logoSrc = logo ? logo.getAttribute('src') : '';
     splash.innerHTML =
+      '<canvas class="splash-stardust-circle" aria-hidden="true"></canvas>' +
       '<div class="splash-content">' +
         (logoSrc ? '<div class="splash-heartbeat-stage"><svg class="splash-heartbeat-track" viewBox="0 0 700 120" preserveAspectRatio="none" aria-hidden="true"><path class="splash-ecg-base" d="M28 60 H160 L178 60 L190 47 L204 73 L222 60 H290 L307 60 L322 24 L342 99 L360 44 L377 60 H510 L526 60 L540 47 L554 73 L570 60 H672"/><path class="splash-ecg-run" d="M28 60 H160 L178 60 L190 47 L204 73 L222 60 H290 L307 60 L322 24 L342 99 L360 44 L377 60 H510 L526 60 L540 47 L554 73 L570 60 H672"/></svg><div class="splash-logo logo" tabindex="0" role="button" aria-label="Hover to animate ECG; click to enter"><img alt="" /></div></div>' : '<div style="font-size:54px;color:#48c69a">✚</div>') +
         '<div class="splash-subtitle">We Enter to Learn, Leave to Achieve</div>' +
@@ -5210,20 +5258,128 @@ Transfusion Reaction</strong><br>
       }
     }
     document.body.appendChild(splash);
+
+    // Stardust traces a circle clockwise from the logo's top.
+    var dustCanvas = splash.querySelector('.splash-stardust-circle');
+    var dustCtx = dustCanvas && dustCanvas.getContext ? dustCanvas.getContext('2d') : null;
+    var dustActive = false, dustFrame = 0, dustStart = 0;
+    var dustW = window.innerWidth, dustH = window.innerHeight, dustDpr = 1;
+    function resizeDust() {
+      if (!dustCanvas || !dustCtx) return;
+      dustW = Math.max(1, window.innerWidth);
+      dustH = Math.max(1, window.innerHeight);
+      dustDpr = Math.min(window.devicePixelRatio || 1, 2);
+      dustCanvas.width = Math.round(dustW * dustDpr);
+      dustCanvas.height = Math.round(dustH * dustDpr);
+      dustCanvas.style.width = dustW + 'px';
+      dustCanvas.style.height = dustH + 'px';
+      dustCtx.setTransform(dustDpr, 0, 0, dustDpr, 0, 0);
+    }
+    function drawDust(now) {
+      if (!dustActive || !dustCtx) return;
+      if (!dustStart) dustStart = now;
+      var elapsed = (now - dustStart) / 1000;
+      dustCtx.clearRect(0, 0, dustW, dustH);
+      var logoNode = splash.querySelector('.splash-logo');
+      var ecgNode = splash.querySelector('.splash-heartbeat-track');
+      var logoRect = logoNode ? logoNode.getBoundingClientRect() : null;
+      var ecgRect = ecgNode ? ecgNode.getBoundingClientRect() : null;
+      var cx = logoRect ? logoRect.left + logoRect.width / 2 : dustW / 2;
+      var cy = logoRect ? logoRect.top + logoRect.height / 2 : dustH / 2;
+      var diameter = ecgRect && ecgRect.width ? ecgRect.width : Math.min(700, dustW);
+      var radius = diameter / 2;
+      var count = Math.max(300, Math.round(diameter * .72));
+      var progress = Math.min(1, elapsed / 1.5);
+      // During the logo-click sequence, the circle completes once and then
+      // hands off to the dedication screen. The circle progresses only after the logo is clicked.
+      var continuousRotation = pendingDedication ? 0 : Math.max(0, elapsed - 1.5) * 0.18;
+      var seed = 41;
+      for (var i = 0; i < count; i++) {
+        seed = (seed * 16807) % 2147483647;
+        var jitter = (seed / 2147483647 - .5) * 5.2;
+        seed = (seed * 16807) % 2147483647;
+        var fraction = seed / 2147483647;
+        var angle = -Math.PI / 2 + fraction * Math.PI * 2 * progress + continuousRotation;
+        var radial = radius + jitter;
+        var x = cx + Math.cos(angle) * radial;
+        var y = cy + Math.sin(angle) * radial;
+        var twinkle = .45 + .55 * Math.abs(Math.sin(elapsed * 2.1 + i * .73));
+        var size = .32 + (i % 5) * .13;
+        var rgb = i % 3 === 0 ? '201,95,145' : (i % 3 === 1 ? '217,111,160' : '239,164,196');
+        dustCtx.beginPath();
+        dustCtx.arc(x, y, size, 0, Math.PI * 2);
+        dustCtx.fillStyle = 'rgba(' + rgb + ',' + (twinkle * .96).toFixed(3) + ')';
+        dustCtx.shadowBlur = 3.8;
+        dustCtx.shadowColor = 'rgba(217,111,160,' + (twinkle * .58).toFixed(3) + ')';
+        dustCtx.fill();
+      }
+      dustCtx.shadowBlur = 0;
+      if (pendingDedication && progress >= 1) {
+        dustActive = false;
+        dustFrame = 0;
+        pendingDedication = false;
+        showDedication();
+        return;
+      }
+      dustFrame = window.requestAnimationFrame(drawDust);
+    }
+    function startDust() {
+      if (!dustCanvas || !dustCtx || dustActive) return;
+      dustActive = true; dustStart = 0;
+      splash.classList.add('splash-stardust-active');
+      resizeDust();
+      dustFrame = window.requestAnimationFrame(drawDust);
+    }
+    function stopDust() {
+      dustActive = false;
+      splash.classList.remove('splash-stardust-active');
+      if (dustFrame) window.cancelAnimationFrame(dustFrame);
+      dustFrame = 0;
+      if (dustCtx) dustCtx.clearRect(0, 0, dustW, dustH);
+    }
+    var pendingDedication = false;
+    var dustLogo = splash.querySelector('.splash-logo');
+    if (dustLogo) {
+      // The circle is a click-triggered loading sequence only; hovering or
+      // keyboard focus must not start its animation.
+    }
+    window.addEventListener('resize', resizeDust, {passive:true});
+
     var dismissed = false;
-    function dismiss() {
+    var dedicationStarted = false;
+    function showDedication() {
       if (dismissed) return;
       dismissed = true;
-      splash.classList.add('splash-leaving');
-      window.setTimeout(function(){ if (splash.parentNode) splash.parentNode.removeChild(splash); }, 380);
+      splash.classList.remove('splash-stardust-active');
+      var credits = document.createElement('div');
+      credits.className = 'splash-dedication-credits';
+      credits.setAttribute('aria-label', 'Dedicated to Avani, Arzoo, Juhi and Yashvi');
+      credits.innerHTML =
+        '<div class="splash-dedication-title">DEDICATED TO</div>' +
+        '<div class="splash-dedication-name">Avani</div>' +
+        '<div class="splash-dedication-name">Arzoo</div>' +
+        '<div class="splash-dedication-name">Juhi</div>' +
+        '<div class="splash-dedication-name">Yashvi</div>';
+      splash.appendChild(credits);
+      window.setTimeout(function() {
+        splash.classList.add('splash-leaving');
+        window.setTimeout(function(){ if (splash.parentNode) splash.parentNode.removeChild(splash); }, 380);
+      }, 1500);
+    }
+    function beginDedicationSequence() {
+      if (dedicationStarted || dismissed) return;
+      dedicationStarted = true;
+      pendingDedication = true;
+      dustStart = 0; // Start the circle's progress from zero on the click.
+      startDust();
     }
     var enterTarget = splash.querySelector('.splash-logo') || splash.querySelector('img') || splash.querySelector('.splash-content > div:first-child');
     if (enterTarget) {
-      enterTarget.addEventListener('click', dismiss);
+      enterTarget.addEventListener('click', beginDedicationSequence);
       enterTarget.addEventListener('keydown', function(event) {
         if (event.key === 'Enter' || event.key === ' ') {
           event.preventDefault();
-          dismiss();
+          beginDedicationSequence();
         }
       });
     }
