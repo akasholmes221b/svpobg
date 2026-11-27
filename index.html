@@ -5644,5 +5644,28 @@ Transfusion Reaction</strong><br>
 }
 </style>
 
+
+<style id="phone-main-menu-performance-fix">
+/* Phone-only rendering optimization: preserve menu layout and styling while
+   avoiding costly blur, permanent compositor layers, and view-motion repaint. */
+@media screen and (max-width: 768px) {
+  #main-view .main-menu-card {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+  #main-view .heartbeat-stage { filter: none !important; }
+  #main-view .link-group > .consent-link {
+    will-change: auto !important;
+    transition: background-color .16s ease, color .16s ease, border-color .16s ease !important;
+    transform: none !important;
+  }
+  #main-view .link-group > .consent-link:hover,
+  #main-view .link-group > .consent-link:focus-visible,
+  #main-view .link-group > .consent-link:active {
+    transform: none !important;
+  }
+  #main-view { animation: none !important; }
+}
+</style>
 </body>
 </html>
