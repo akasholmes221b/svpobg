@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html lang="gu">
 <head>
+    <style id="department-splash-first-paint">
+      /* Prevent the main menu from flashing before the splash overlay is initialized. */
+      html:not(.department-splash-ready) body { visibility: hidden !important; }
+      html:not(.department-splash-ready) { background: radial-gradient(ellipse at center, #243634 0%, #12191d 72%); }
+    </style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Department of Obstetrics & Gynecology</title>
@@ -5258,6 +5263,9 @@ Transfusion Reaction</strong><br>
       }
     }
     document.body.appendChild(splash);
+    // Reveal the document only after the splash is in place, preventing a
+    // first-paint flash of the underlying main menu.
+    document.documentElement.classList.add('department-splash-ready');
 
     // Stardust traces a circle clockwise from the logo's top.
     var dustCanvas = splash.querySelector('.splash-stardust-circle');
