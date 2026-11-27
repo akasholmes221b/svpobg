@@ -4342,6 +4342,33 @@ Transfusion Reaction</strong><br>
             // Returning to the Main Menu starts a fresh form session.
             // Clear checked consent points and reset their visual/order state.
             if (hash === '#main') {
+                // Hyperlinks 2 and 3 (Obstetric/Gynecology Surgery Consents)
+                // must reopen as a completely fresh form session.
+                ['form2-view', 'form3-view'].forEach(viewId => {
+                    const view = document.getElementById(viewId);
+                    if (!view) return;
+                    view.querySelectorAll('input:not([type=checkbox]):not([type=radio]), textarea').forEach(field => {
+                        field.value = '';
+                    });
+                    view.querySelectorAll('input[type=checkbox]').forEach(checkbox => {
+                        checkbox.checked = false;
+                        checkbox.dispatchEvent(new Event('change', { bubbles: true }));
+                    });
+                    view.querySelectorAll('.checkbox-item').forEach(item => {
+                        item.classList.remove('selected-highlight');
+                        item.style.order = '9999';
+                    });
+                    view.querySelectorAll('.autocomplete-list').forEach(list => {
+                        list.innerHTML = '';
+                        list.style.display = 'none';
+                    });
+                    view.classList.remove('checklist-expanded');
+                });
+                // Reset the selector's internal selected-item arrays as well as
+                // the visible fields, so old indications cannot reappear.
+                if (typeof window.resetSurgicalIndications === 'function') {
+                    window.resetSurgicalIndications();
+                }
                 document.querySelectorAll('.form-view input[type="checkbox"]').forEach(checkbox => {
                     checkbox.checked = false;
                     checkbox.dispatchEvent(new Event('change', { bubbles: true }));
@@ -4703,16 +4730,16 @@ Transfusion Reaction</strong><br>
                 {id: "gyn-indication-2", eng: "Abnormal Pap Smear (LSIL)", guj: ""},
                 {id: "gyn-indication-3", eng: "Abnormal Pap Smear (HSIL)", guj: ""},
                 {id: "gyn-indication-4", eng: "Abnormal Pap Smear (AGC)", guj: ""},
-                {id: "gyn-indication-5", eng: "Abnormal Uterine Bleeding", guj: ""},
-                {id: "gyn-indication-6", eng: "Abnormal Uterine Bleeding- Polyp", guj: ""},
-                {id: "gyn-indication-7", eng: "Abnormal Uterine Bleeding- Adenomyosis", guj: ""},
-                {id: "gyn-indication-8", eng: "Abnormal Uterine Bleeding- Leiomyoma Uteri", guj: ""},
-                {id: "gyn-indication-9", eng: "Abnormal Uterine Bleeding- Malignancy and Hyperplasia", guj: ""},
-                {id: "gyn-indication-10", eng: "Abnormal Uterine Bleeding- Coagulopathy", guj: ""},
-                {id: "gyn-indication-11", eng: "Abnormal Uterine Bleeding- Ovulatory Dysfunction", guj: ""},
-                {id: "gyn-indication-12", eng: "Abnormal Uterine Bleeding- Endometrial", guj: ""},
-                {id: "gyn-indication-13", eng: "Abnormal Uterine Bleeding- Iatrogenic", guj: ""},
-                {id: "gyn-indication-14", eng: "Abnormal Uterine Bleeding- Not Otherwise Specified", guj: ""},
+                {id: "gyn-indication-5", eng: "Abnormal Uterine Bleeding (AUB)", guj: ""},
+                {id: "gyn-indication-6", eng: "Abnormal Uterine Bleeding- Polyp (AUB-P)", guj: ""},
+                {id: "gyn-indication-7", eng: "Abnormal Uterine Bleeding- Adenomyosis (AUB-A)", guj: ""},
+                {id: "gyn-indication-8", eng: "Abnormal Uterine Bleeding- Leiomyoma Uteri (AUB-L)", guj: ""},
+                {id: "gyn-indication-9", eng: "Abnormal Uterine Bleeding- Malignancy and Hyperplasia (AUB-M)", guj: ""},
+                {id: "gyn-indication-10", eng: "Abnormal Uterine Bleeding- Coagulopathy (AUB-C)", guj: ""},
+                {id: "gyn-indication-11", eng: "Abnormal Uterine Bleeding- Ovulatory Dysfunction (AUB-O)", guj: ""},
+                {id: "gyn-indication-12", eng: "Abnormal Uterine Bleeding- Endometrial (AUB-E)", guj: ""},
+                {id: "gyn-indication-13", eng: "Abnormal Uterine Bleeding- Iatrogenic (AUB-I)", guj: ""},
+                {id: "gyn-indication-14", eng: "Abnormal Uterine Bleeding- Not Otherwise Specified (AUB-N)", guj: ""},
                 {id: "gyn-indication-15", eng: "Acute Abdomen", guj: ""},
                 {id: "gyn-indication-16", eng: "Acute Pelvic Pain", guj: ""},
                 {id: "gyn-indication-17", eng: "Adenomyosis", guj: ""},
@@ -4821,6 +4848,72 @@ Transfusion Reaction</strong><br>
                 },
                 () => selectedIndications3.map(i => i.id)
             );
+
+            // Tap either indication text field to remove a selected item without
+            // reopening the autocomplete/search list. The numbered chooser works on
+            // touch devices and leaves all other selections intact.
+            function attachSelectedIndicationRemoval(fields, getSelections, removeSelection, refresh) {
+                fields.filter(Boolean).forEach(field => {
+                    field.style.cursor = 'pointer';
+                    field.title = 'Tap to remove a selected indication';
+                    field.addEventListener('click', () => {
+                        const items = getSelections();
+                        if (!items.length) {
+                            alert('There are no selected indications to remove.');
+                            return;
+                        }
+                        const choices = items.map((item, index) => `${index + 1}. ${item.text}`).join('\n');
+                        const answer = prompt('Enter the number of the indication to remove:\n\n' + choices);
+                        if (answer === null || answer.trim() === '') return;
+                        const number = Number(answer.trim());
+                        if (!Number.isInteger(number) || number < 1 || number > items.length) {
+                            alert('Please enter a valid number from the list.');
+                            return;
+                        }
+                        removeSelection(items[number - 1].id);
+                        refresh();
+                    });
+                });
+            }
+
+            attachSelectedIndicationRemoval(
+                [indicationDisplay2, karanDisplay2],
+                () => selectedIndications2,
+                id => { selectedIndications2 = selectedIndications2.filter(item => item.id !== id); },
+                () => {
+                    indicationDisplay2.value = selectedIndications2.map(i => i.text).join(' + ');
+                    karanDisplay2.value = selectedIndications2.map(i => i.guj).join(' ');
+                }
+            );
+
+            attachSelectedIndicationRemoval(
+                [indicationDisplay3, karanDisplay3],
+                () => selectedIndications3,
+                id => { selectedIndications3 = selectedIndications3.filter(item => item.id !== id); },
+                () => {
+                    indicationDisplay3.value = selectedIndications3.map(i => i.text).join(' + ');
+                    const translatedSelections = selectedIndications3.map(i => i.guj).filter(Boolean);
+                    if (translatedSelections.length) karanDisplay3.value = translatedSelections.join(' ');
+                }
+            );
+
+            // Clear selector state (not just its displayed text) on menu return.
+            window.resetSurgicalIndications = () => {
+                selectedIndications2 = [];
+                selectedIndications3 = [];
+                if (indicationDisplay2) indicationDisplay2.value = '';
+                if (karanDisplay2) karanDisplay2.value = '';
+                if (indicationDisplay3) indicationDisplay3.value = '';
+                if (karanDisplay3) karanDisplay3.value = '';
+                ['search-input-indication', 'search-input-indication-3'].forEach(id => {
+                    const input = document.getElementById(id);
+                    if (input) input.value = '';
+                });
+                ['autocomplete-list-indication', 'autocomplete-list-indication-3'].forEach(id => {
+                    const list = document.getElementById(id);
+                    if (list) { list.innerHTML = ''; list.style.display = 'none'; }
+                });
+            };
         });
 
         // --- 3. Clean Print Logic ---
